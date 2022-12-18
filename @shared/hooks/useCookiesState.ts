@@ -26,6 +26,10 @@ export const useCookiesState = () => {
     [cookies]
   );
 
+  const totalCount = useMemo(() => {
+    return Object.keys(cookies["user-cart"] ?? {}).length
+  },[cookies])
+
   const removeProduct = useCallback(
     (id: number) => {
       let cartData = {...cookies["user-cart"]} ?? {};
@@ -79,6 +83,7 @@ export const useCookiesState = () => {
       quantityDecrease,
       quantityIncrease,
       getProductCount,
+      totalCount
     }),
     [
       addToCart,
@@ -87,6 +92,7 @@ export const useCookiesState = () => {
       quantityDecrease,
       quantityIncrease,
       getProductCount,
+      totalCount
     ]
   );
 };

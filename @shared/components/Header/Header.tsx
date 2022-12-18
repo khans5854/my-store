@@ -6,14 +6,17 @@ import {
   TextField,
   Toolbar,
   Typography,
+  Badge
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
 import { Cart } from "@modules/cart";
 import { useHeader } from "./useHeader";
+import { useCookiesState } from "@shared";
 
 export const Header = () => {
   const {search, searchHandler,handleClick, anchorEl, handleClose} = useHeader();
+  const {totalCount} = useCookiesState();
 
 
   return (
@@ -42,9 +45,13 @@ export const Header = () => {
               startAdornment: <SearchIcon />
             }}
           />
+          
           <IconButton onClick={handleClick}>
-            <ShoppingCartIcon />
+            <Badge badgeContent={totalCount} color="warning">
+              <ShoppingCartIcon />
+            </Badge>
           </IconButton>
+          
         </Stack>
       </Toolbar>
       <Menu
