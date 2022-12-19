@@ -45,35 +45,37 @@ export const ProductProvider = ({ children }: { children: JSX.Element }) => {
     const controller = new AbortController();
     const signal = controller.signal;
     (async () => {
-      const products = await fetch(`${BASE_URL}/products`, { signal }).then(
-        (res) => res.json()
-      );
-      const allProduct = products.map((product: any) => {
-        return isPrime(product.id)
-          ? {
-              ...product,
-              price: {
-                actualPrice: product.price,
-                discountedPrice: discountPrice(product.price),
-                offer: 5,
-              },
-              outOfStock: OUT_OF_STOCK_IDS.includes(product.id)
-                ? new Promise((resolve) => {
-                    setTimeout(resolve, 60000);
-                  })
-                : undefined,
-            }
-          : {
-              ...product,
-              price: { discountedPrice: product.price },
-              outOfStock: OUT_OF_STOCK_IDS.includes(product.id)
-                ? new Promise((resolve) => {
-                    setTimeout(resolve, 60000);
-                  })
-                : undefined,
-            };
-      });
-      setProductState(allProduct);
+      try{
+        const products = await fetch(`${BASE_URL}/products`, { signal }).then(
+          (res) => res.json()
+        );
+        const allProduct = products.map((product: any) => {
+          return isPrime(product.id)
+            ? {
+                ...product,
+                price: {
+                  actualPrice: product.price,
+                  discountedPrice: discountPrice(product.price),
+                  offer: 5,
+                },
+                outOfStock: OUT_OF_STOCK_IDS.includes(product.id)
+                  ? new Promise((resolve) => {
+                      setTimeout(resolve, 60000);
+                    })
+                  : undefined,
+              }
+            : {
+                ...product,
+                price: { discountedPrice: product.price },
+                outOfStock: OUT_OF_STOCK_IDS.includes(product.id)
+                  ? new Promise((resolve) => {
+                      setTimeout(resolve, 60000);
+                    })
+                  : undefined,
+              };
+        });
+        setProductState(allProduct);
+      } catch() {}
     })();
     return () => controller?.abort();
   }, []);
