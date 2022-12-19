@@ -75,7 +75,9 @@ export const ProductProvider = ({ children }: { children: JSX.Element }) => {
               };
         });
         setProductState(allProduct);
-      } catch() {}
+      } catch(error) {
+        console.error(error)
+      }
     })();
     return () => controller?.abort();
   }, []);
